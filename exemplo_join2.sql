@@ -53,37 +53,45 @@ CREATE TABLE tb_notas (
 
 
 -- 1 - Liste o nome do aluno, o nome da disciplina e a nota, de todos os alunos matriculados.
-select alu_nome, dis_nome, not_valor from tb_matriculas join tb_alunos on mat_alu_id = alu_id 
- join tb_disciplinas on mat_dis_id = dis_id 
- join tb_notas on not_mat_id = mat_id;
+select alu_nome, dis_nome, not_valor from tb_matriculas join tb_alunos on mat_alu_id=alu_id
+join tb_disciplinas on mat_dis_id=dis_id
+join tb_notas on not_mat_id=mat_id;
+
 
 -- 2 - Mostre a quantidade de alunos com nota superior a 5;
-select count(*) nota_maior_5 from tb_matriculas
- join tb_alunos on mat_alu_id = alu_id 
- join tb_notas on not_mat_id = mat_id where not_valor > 5;
+select count(*) from tb_matriculas join tb_alunos on mat_alu_id=alu_id
+join tb_notas on not_mat_id=mat_id where not_valor > 5;
+    
 
--- 3 - Liste o nome do aluno, o nome da disciplina e a nota, de todos os alunos com nota superior a 7 e matriculados em alguma das disciplinas  (Algoritmos e Estruturas de Dados, Computação em Nuvem e Banco de Dados);
-select alu_nome, dis_nome, not_valor from tb_matriculas 
-join tb_alunos on mat_alu_id = alu_id 
-join tb_disciplinas on  mat_dis_id = dis_id 
-join tb_notas on not_mat_id = mat_id where not_valor > 7 and dis_nome in ('Algoritmos e Estruturas de Dados', 'Computação em Nuvem', 'Banco de Dados');
 
--- 4 - Liste o nome do curso, nome do aluno, o nome da disciplina e a nota  de todos os alunos do curso Ciência da Computação ou Engenharia de Software, que estão com notas entre 4 e 8;
-select alu_nome, cur_nome, dis_nome, not_valor from tb_matriculas 
-join tb_alunos on mat_alu_id = alu_id 
-join tb_disciplinas on mat_dis_id = dis_id 
-join tb_notas on not_mat_id = mat_id 
-join tb_cursos on alu_cur_id = cur_id where cur_nome in ('Ciência da Computação','Engenharia de Software') and (not_valor > 4 and not_valor <8);
+-- 3 - Liste o nome do aluno, o nome da disciplina e a nota, de todos os alunos com nota superior a 7 
+-- e matriculados em alguma das disciplinas  (Algoritmos e Estruturas de Dados, Computação em Nuvem e Banco de Dados);
+select alu_nome, dis_nome, not_valor from tb_matriculas join tb_alunos on mat_alu_id=alu_id
+join tb_disciplina on mat_dis_id=dis_id join tb_notas on not_mat_id=mat_id
+where not_valor > 7 and dis_nome in ('algoritmos e estruturas de dados','computação em nuvem','banco de dados');
 
--- 5 - Liste  o nome do professor, nome do curso, nome do aluno, o nome da disciplina e a nota de todos os alunos do Redes de Computadores ou Análise e Desenvolvimento de Sistemas, que começam com a letra (E ou C ou D ou G), e que estão com notas entre 3 e 9;
-select pro_nome, cur_nome, alu_nome, dis_nome, not_valor
-from tb_matriculas join tb_alunos on mat_alu_id = alu_id 
-join tb_disciplinas on mat_dis_id = dis_id 
+
+-- 4 - Liste o nome do curso, nome do aluno, o nome da disciplina e a nota  de todos os alunos do curso Ciência da Computação 
+-- ou Engenharia de Software, que estão com notas entre 4 e 8;
+select cur_nome, alu_nome, dis_nome, not_valor 
+from tb_matriculas join tb_alunos on mat_alu_id=alu_id
+join tb_disciplina on mat_dis_id=dis_id
+join tb_curso on alu_cur_id=cur_id
+join tb_notas on not_mat_id=mat_id
+where cur_nome in ('ciencia...','engenharia...') and not_valor between 4 and 8;
+
+-- 5 - Liste  o nome do professor, nome do curso, nome do aluno, o nome da disciplina e a nota de todos os alunos
+-- do curso Redes de Computadores ou Análise e Desenvolvimento de Sistemas, 
+-- que começam com a letra (E ou C ou D ou G), e que estão com notas entre 3 e 9;
+select pro_nome, cur_nome, alu_nome, dis_nome, not_valor 
+from tb_matriculas join tb_alunos on mat_alu_id=alu_id
+join tb_disciplina on mat_dis_id=dis_id
+join tb_curso on alu_cur_id=cur_id
 join tb_professores on dis_pro_id=pro_id
-join tb_notas on not_mat_id = mat_id 
-join tb_cursos on alu_cur_id = cur_id 
-where cur_nome in ('Redes de Computadores','Análise e Desenvolvimento de Sistemas') and 
-(alu_nome like 'E%' or alu_nome like 'C%' or alu_nome like 'D%' or alu_nome like 'G%') and (not_valor > 3 and not_valor <9);
+join tb_notas on not_mat_id=mat_id
+where cur_nome in ('redes...','analise...') and 
+(alu_nome like 'E%' or alu_nome like 'C%' or alu_nome like 'D%' or alu_nome like 'G%') and not_valor between 3 and 9;
+
 
 
 INSERT INTO tb_cursos (cur_nome)
